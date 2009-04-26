@@ -94,12 +94,10 @@ class SpecialRepo extends SpecialPage {
 				$bootSize = 0;
 				$zipSize = 0;
 				$rating = 0;
-				if ($dirs){
-					print strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
-						' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
-						' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . ' ' . $dirs . $newline;
-				} else {
-				}
+				$dirs = '';
+				print strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
+					' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
+					' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . $dirs . $newline;
 				foreach($headers as $key => $header){
 					if ($key > 5) break;
 					if (!($header == $key)){
