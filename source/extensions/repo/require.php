@@ -112,6 +112,5 @@ class SpecialRepo extends SpecialPage {
 	}
 }
 
-new SpecialRepo('Repo');
 new SpecialRepo('HBB');
 ?>
