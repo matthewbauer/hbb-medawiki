@@ -25,7 +25,7 @@ class SpecialRepo extends SpecialPage {
 		$wgOut->clearHTML();
 		$wgOut->disable();
 
-		$newline = "\n";
+		$newline = "<br/>";
 
 		$title = $wgRequest->getText('title');
 		if (strpos($title,'/')){
@@ -75,31 +75,29 @@ class SpecialRepo extends SpecialPage {
 				$columns = explode('|', $row);
 				$controllers = '';
 				if (strpos($columns[$headers[8]], '{{') && strpos($columns[$headers[8]], '}}')){
-					if (strpos($columns[$headers[8]], '{{Wiimote1}}') || strpos($columns[$headers[8]], '{{Wiimote}}')) $controllers = $controllers . "w";
+					if (strpos($columns[$headers[8]], '{{Wiimote1}}') || strpos($columns[$headers[8]], '{{Wiimote}}'))
+						$controllers = $controllers . "w";
 					if (strpos($columns[$headers[8]], '{{Wiimote2}}')) $controllers = $controllers . "ww";
 					if (strpos($columns[$headers[8]], '{{Wiimote3}}')) $controllers = $controllers . "www";
 					if (strpos($columns[$headers[8]], '{{Wiimote4}}')) $controllers = $controllers . "wwww";
-					if (strpos($columns[$headers[8]], '{{FrontSD}}') || strpos($columns[$headers[8]], '{{FrontSDHC}}')) $controllers = $controllers . "s";
+					if (strpos($columns[$headers[8]], '{{FrontSD}}') || strpos($columns[$headers[8]], '{{FrontSDHC}}'))
+						$controllers = $controllers . "s";
 					if (strpos($columns[$headers[8]], '{{Nunchuk}}')) $controllers = $controllers . "n";
 					if (strpos($columns[$headers[8]], '{{ClassicController}}')) $controllers = $controllers . "c";
 					if (strpos($columns[$headers[8]], '{{GCNController}}')) $controllers = $controllers . "g";
 					if (strpos($columns[$headers[8]], '{{USBKeyboard}}')) $controllers = $controllers . "k";
 					if (strpos($columns[$headers[8]], '{{WiiZapper}}')) $controllers = $controllers . "z";
-				} else {
-					$controllers = $columns[$headers[8]];
-				}
+				} else $controllers = $columns[$headers[8]];
 				$imageSize = 0;
 				$numberOfFiles = 0;
 				$timestamp = 0;
 				$bootSize = 0;
 				$zipSize = 0;
 				$rating = 0;
-				if ($dirs){
-					print strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
-						' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
-						' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . ' ' . $dirs . $newline;
-				} else {
-				}
+				$dirs = '';
+				print strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
+					' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
+					' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . $dirs . $newline;
 				foreach($headers as $key => $header){
 					if ($key > 5) break;
 					if (!($header == $key)){
@@ -114,6 +112,5 @@ class SpecialRepo extends SpecialPage {
 	}
 }
 
-new SpecialRepo('Repo');
 new SpecialRepo('HBB');
 ?>
