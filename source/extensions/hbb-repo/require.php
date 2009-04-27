@@ -31,7 +31,7 @@ class SpecialRepo extends SpecialPage {
 		if (strpos($title,'/')) {$title = str_replace("Special:".$this->name."/", "", $title);
 		} else $title = $this->name;
 	
-		echo 'From: http://'.$IP.'/mediawiki/index.php/' . $title;
+		echo 'From: http://'.$IP.'/mediawiki/index.php/' . $title . $newline;
 
 		$title = Title::newFromText($title);
 		$article = new Article($title);
@@ -52,7 +52,7 @@ class SpecialRepo extends SpecialPage {
 						$headers[1] = $columnkey;
 					} else if ($column == 'version'){
 						$headers[2] = $columnkey;
-					} else if ($column == 'downloads' || $column == 'hits'){
+					} else if ($column == 'size'){
 						$headers[3] = $columnkey;
 					} else if ($column == 'shortdescription' || $column == 'description'){
 						$headers[4] = $columnkey;
@@ -64,6 +64,12 @@ class SpecialRepo extends SpecialPage {
 						$headers[7] = $columnkey;
 					} else if ($column == 'features' || $column == 'controllers' || $column == 'peripherals'){
 						$headers[8] = $columnkey;
+					} else if ($column == 'directory' || $colmn == 'directories'){
+						$headers[9] = $columnkey;
+					} else if ($column == 'rating'){
+						$headers[10] = $columnkey;
+					} else if ($column == 'downloads' || $column == 'hits'){
+						$headers[11] = $columnkey;
 					}
 				}
 				if ($headers[5] == 5) $headers[5] = $headers[4];
@@ -84,20 +90,20 @@ class SpecialRepo extends SpecialPage {
 					if (strpos($columns[$headers[8]], '{{USBKeyboard}}')) $controllers = $controllers . "k";
 					if (strpos($columns[$headers[8]], '{{WiiZapper}}')) $controllers = $controllers . "z";
 				} else $controllers = $columns[$headers[8]];
+				$format = $columns[$headers[6]];
 				$imageSize = 0;
 				$numberOfFiles = 0;
 				$timestamp = 0;
 				$bootSize = 0;
 				$zipSize = 0;
-				$rating = 0;
-				$dirs = '';
-				echo strtolower(trim(str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
-					' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
-					' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . $dirs;
+				$dirs = $columns[$headers[9]];
+				$rating = $columns[$headers[10]];
+				$downloads = $columns[$headers[11]];
+				echo strtolower(trim(str_replace("\n","",str_replace("]","",str_replace("[","",$columns[$headers[0]]))))) . ' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $format . ' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . ' ' . $dirs . $newline;
 				foreach($headers as $key => $header){
 					if ($key == 6) break;
 					if (!($header == $key)){
-						echo trim(str_replace("]","",str_replace("[","",$columns[$header])));
+						echo trim(str_replace("]","",str_replace("[","",$columns[$header]))) . $newline;
 					} else {
 						echo "";
 					}
