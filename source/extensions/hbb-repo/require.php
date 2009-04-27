@@ -28,14 +28,10 @@ class SpecialRepo extends SpecialPage {
 		$newline = "\n";
 
 		$title = $wgRequest->getText('title');
-		if (strpos($title,'/')){
-			$title = str_replace("Special:".$this->name."/", "", $title);
-			echo 'This is where the version and readme should go. The wiki page is <a href="/mediawiki/index.php/'.
-				$title . '">here</a>';
-		} else {
-			$title = $this->name;
-			echo 'This is where the version and readme should go. The wiki page is <a href="/mediawiki/index.php/' . $title . '">here</a>';
-		}
+		if (strpos($title,'/')) {$title = str_replace("Special:".$this->name."/", "", $title);
+		} else $title = $this->name;
+	
+		echo 'From: http://'.$IP.'/mediawiki/index.php/' . $title;
 
 		$title = Title::newFromText($title);
 		$article = new Article($title);
@@ -66,7 +62,7 @@ class SpecialRepo extends SpecialPage {
 						$headers[6] = $columnkey;
 					} else if ($column == 'date') {
 						$headers[7] = $columnkey;
-					} else if ($column == 'features' || $column == 'controllers' || $column == 'supported' || $column == 'peripherals'){
+					} else if ($column == 'features' || $column == 'controllers' || $column == 'peripherals'){
 						$headers[8] = $columnkey;
 					}
 				}
@@ -95,15 +91,15 @@ class SpecialRepo extends SpecialPage {
 				$zipSize = 0;
 				$rating = 0;
 				$dirs = '';
-				echo strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
+				echo strtolower(trim(str_replace("]","",str_replace("[","",$columns[$headers[0]])))) . 
 					' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $columns[$headers[6]] .
 					' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . $dirs;
 				foreach($headers as $key => $header){
 					if ($key == 6) break;
 					if (!($header == $key)){
-						echo str_replace("]","",str_replace("[","",$columns[$header]));
+						echo trim(str_replace("]","",str_replace("[","",$columns[$header])));
 					} else {
-						echo;
+						echo "";
 					}
 				}
 			}
