@@ -109,7 +109,7 @@ class SpecialRepo extends SpecialPage {
 					$timestamp = date();
 				}
 
-				$format = strtolower$columns[$headers[6]]);
+				$format = strtolower($columns[$headers[6]]);
 				$dirs = $columns[$headers[7]];
 				if (strpos($columns[$headers[8]], "{{") && strpos($columns[$headers[8]], "}}"){
 					$rating = 0;
