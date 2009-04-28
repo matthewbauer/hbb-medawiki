@@ -27,11 +27,11 @@ class SpecialRepo extends SpecialPage {
 
 		$newline = "\n";
 
+		echo $newline;
+
 		$title = $wgRequest->getText('title');
 		if (strpos($title,'/')) {$title = str_replace("Special:".$this->name."/", "", $title);
 		} else $title = $this->name;
-	
-		echo $newline;
 
 		$title = Title::newFromText($title);
 		$article = new Article($title);
@@ -45,7 +45,7 @@ class SpecialRepo extends SpecialPage {
 				$columns = explode('!', $row);
 				$headers = array(0, 1, 2, 3, 4, 5);
 				foreach($columns as $columnkey => $column){
-					$column = strtolower(str_replace(" ","",str_replace("\n","",$column)));
+					$column = trim(strtolower(str_replace("]","",str_replace("[","",str_replace("\n","",$column)))));
 					if ($column == 'title' || $column == 'name'){
 						$headers[0] = $columnkey;
 					} else if ($column == 'author'){
@@ -100,18 +100,14 @@ class SpecialRepo extends SpecialPage {
 				$dirs = $columns[$headers[7]];
 				$rating = $columns[$headers[8]];
 				$downloads = $columns[$headers[9]];
-				$imageSize = $columns[$headers[10];
+				$imageSize = $columns[$headers[10]];
 				$timestamp = $columns[$headers[11]];
 				$zipSize = $columns[$headers[12]];
 				$bootSize = $columns[$headers[13]];
 				echo trim(str_replace("\n","",str_replace("]","",str_replace("[","",strtolower($columns[$headers[0]]) . ' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $format . ' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . ' ' . $dirs)))) . $newline;
 				foreach($headers as $key => $header){
 					if ($key == 6) break;
-					if (!($header == $key)){
-						echo trim(str_replace("]","",str_replace("[","",$columns[$header]))) . $newline;
-					} else {
-						echo $newline;
-					}
+					echo trim(str_replace("]","",str_replace("[","",str_replace("\n","",$columns[$header])))) . $newline;
 				}
 			}
 		}
