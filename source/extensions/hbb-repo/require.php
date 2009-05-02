@@ -111,7 +111,7 @@ class SpecialRepo extends SpecialPage {
 
 				$format = strtolower($columns[$headers[6]]);
 				$dirs = $columns[$headers[7]];
-				if (strpos($columns[$headers[8]], "{{") && strpos($columns[$headers[8]], "}}"){
+				if (strpos($columns[$headers[8], "{{") && strpos($columns[$headers[8]], "}}")){
 					$rating = 0;
 					if (strpos($columns[$headers[8]], "{{Star1}}") $rating+=1;
 					if (strpos($columns[$headers[8]], "{{Star2}}") $rating+=2;
