@@ -113,10 +113,10 @@ class SpecialRepo extends SpecialPage {
 				$dirs = $columns[$headers[7]];
 				if (strpos($columns[$headers[8]], "{{") && strpos($columns[$headers[8]], "}}")){
 					$rating = 0;
-					if (strpos($columns[$headers[8]], "{{Star1}}") $rating+=1;
-					if (strpos($columns[$headers[8]], "{{Star2}}") $rating+=2;
-					if (strpos($columns[$headers[8]], "{{Star3}}") $rating+=3;
-					if (strpos($columns[$headers[8]], "{{Star4}}") $rating+=4;
+					if (strpos($columns[$headers[8]], "{{Star1}}")) $rating+=1;
+					if (strpos($columns[$headers[8]], "{{Star2}}")) $rating+=2;
+					if (strpos($columns[$headers[8]], "{{Star3}}")) $rating+=3;
+					if (strpos($columns[$headers[8]], "{{Star4}}")) $rating+=4;
 				} else {
 					$rating = $columns[$headers[8]];
 				}
