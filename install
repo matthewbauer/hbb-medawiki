@@ -1,0 +1,9 @@
+#!/bin/bash
+
+MEDIAWIKI=/*/*/mediawiki
+REQUIRE_STRING="require_once(\"\$IP/extensions/hbb-repo/Require.php\");"
+
+cp -fru ./source/extensions $MEDIAWIKI
+if ( [ -z $(cat $MEDIAWIKI/LocalSettings.php | grep $REQUIRE_STRING) ] ) then
+	echo $REQUIRE_STRING >> $MEDIAWIKI/LocalSettings.php
+fi
