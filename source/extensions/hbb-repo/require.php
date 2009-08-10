@@ -1,12 +1,12 @@
-oj<?php
+<?php
 if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['specialpage'][] = array(
-	'name' => 'HBB Repo',
+	'name' => 'HBB Repository',
 	'author' => 'Matthew Bauer', 
-	'url' => 'http://www.wiibrew.org/wiki/Homebrew\ Browser', 
+	'url' => 'http://www.wiibrew.org/wiki/Homebrew Browser', 
 	'description' => 'This extension creates the page Special:Repo in the Wiki, which can be used by the Homebrew Browser to load Homebrew Apps.',
-	'version' => 0.01
+	'version' => 0.1
 );
 
 require_once('includes/SpecialPage.php');
@@ -37,15 +37,18 @@ class SpecialRepo extends SpecialPage {
 		$article = new Article($title);
 		$content = $article->getContent();
 
-		$rows = explode('|-', $content);
+		$a = explode("{|",$content);
+		$b = explode("|}", $a[1]);
+		$rows = explode("|-", $b[0]);
+
+		$headers = array();
 		
 		foreach($rows as $key => $row){
-			if ($key == 0){
-			} else if ($key == 1) {
+			if ($key == 0) {
 				$columns = explode('!', $row);
-				$headers = array(0, 1, 2, 3, 4, 5);
 				foreach($columns as $columnkey => $column){
-					$column = trim(strtolower(str_replace("]","",str_replace("[","",str_replace("\n","",$column)))));
+					if ($columnkey==0) continue;
+					$column = strtolower(str_replace(" ","",str_replace("]","",str_replace("[","",str_replace("\n","",$column)))));
 					if ($column == 'title' || $column == 'name'){
 						$headers[0] = $columnkey;
 					} else if ($column == 'author'){
@@ -54,13 +57,13 @@ class SpecialRepo extends SpecialPage {
 						$headers[2] = $columnkey;
 					} else if ($column == 'size'){
 						$headers[3] = $columnkey;
-					} else if ($column == 'shortdescription' || $column == 'description'){
+					} else if ($column == 'shortdescription'){
 						$headers[4] = $columnkey;
-					} else if ($column == 'longdescription'){
+					} else if ($column == 'longdescription' || $column == 'description'){
 						$headers[5] = $columnkey;
 					} else if ($column == 'format') {
 						$headers[6] = $columnkey;
-					} else if ($column == 'directory' || $colmn == 'directories'){
+					} else if ($column == 'directory' || $column == 'directories'){
 						$headers[7] = $columnkey;
 					} else if ($column == 'rating'){
 						$headers[8] = $columnkey;
@@ -70,7 +73,7 @@ class SpecialRepo extends SpecialPage {
 						$headers[10] = $columnkey;
 					} else if ($column == 'timestamp'){
 						$headers[11] = $columnkey;
-					} else if ($column == 'date' || $column == 'releasedate'){
+					} else if ($column == 'releasedate' || $column == 'date'){
 						$headers[12] = $columnkey;
 					} else if ($column == 'zipsize'){
 						$headers[13] = $columnkey;
@@ -82,55 +85,87 @@ class SpecialRepo extends SpecialPage {
 				}
 				if ($headers[5] == 5) $headers[5] = $headers[4];
 			} else {
-				$columns = explode('|', $row);
-				$name = strtolower(trim(str_replace(" ", "_",
+				$columns = explode("|", $row);
+				$name = strtolower(str_replace(" ", "_",trim(
 						str_replace("\n","",str_replace("]","",str_replace("[","",$columns[$headers[0]]))))));
-				$controllers = '';
-				if (strpos($columns[$headers[14]], '{{') && strpos($columns[$headers[14]], '}}')){
-					if (strpos($columns[$headers[14]], '{{Wiimote1}}') || strpos($columns[$headers[8]], '{{Wiimote}}'))
+
+				if (strpos($columns[$headers[15]], "{{")!==false && strpos($columns[$headers[15]], "}}")!==false){
+					$controllers = '';
+					if (strpos($columns[$headers[15]], '{{Wiimote1}}')!==false || strpos($columns[$headers[15]], '{{Wiimote}}')!==false)
 						$controllers = $controllers . "w";
-					if (strpos($columns[$headers[14]], '{{Wiimote2}}')) $controllers = $controllers . "ww";
-					if (strpos($columns[$headers[14]], '{{Wiimote3}}')) $controllers = $controllers . "www";
-					if (strpos($columns[$headers[14]], '{{Wiimote4}}')) $controllers = $controllers . "wwww";
-					if (strpos($columns[$headers[14]], '{{FrontSD}}') || strpos($columns[$headers[8]], '{{FrontSDHC}}'))
+					if (strpos($columns[$headers[15]], '{{Wiimote2}}')!==false) $controllers = $controllers . "ww";
+					if (strpos($columns[$headers[15]], '{{Wiimote3}}')!==false) $controllers = $controllers . "www";
+					if (strpos($columns[$headers[15]], '{{Wiimote4}}')!==false) $controllers = $controllers . "wwww";
+					if (strpos($columns[$headers[15]], '{{FrontSD}}')!==false 
+							|| strpos($columns[$headers[15]], '{{FrontSDHC}}')!==false)
 						$controllers = $controllers . "s";
-					if (strpos($columns[$headers[14]], '{{Nunchuk}}')) $controllers = $controllers . "n";
-					if (strpos($columns[$headers[14]], '{{ClassicController}}')) $controllers = $controllers . "c";
-					if (strpos($columns[$headers[14]], '{{GCNController}}')) $controllers = $controllers . "g";
-					if (strpos($columns[$headers[14]], '{{USBKeyboard}}')) $controllers = $controllers . "k";
-					if (strpos($columns[$headers[14]], '{{WiiZapper}}')) $controllers = $controllers . "z";
-				} else $controllers = $columns[$headers[14]];
+					if (strpos($columns[$headers[15]], '{{Nunchuk}}')!==false) $controllers = $controllers . "n";
+					if (strpos($columns[$headers[15]], '{{ClassicController}}')!==false) $controllers = $controllers . "c";
+					if (strpos($columns[$headers[15]], '{{GCNController}}')!==false) $controllers = $controllers . "g";
+					if (strpos($columns[$headers[15]], '{{USBKeyboard}}')!==false) $controllers = $controllers . "k";
+					if (strpos($columns[$headers[15]], '{{WiiZapper}}')!==false) $controllers = $controllers . "z";
+				} else $controllers = $columns[$headers[15]];
 
 				if ($columns[$headers[11]]){
 					$timestamp = $columns[$headers[11]];
 				} else if ($columns[$headers[12]]){
-					$timestamp = date();
+					$timestamp = strtotime($columns[$headers[12]]);
+					if ($timestamp === false) $timestamp = mktime();
 				} else {
-					$timestamp = date();
+					$timestamp = mktime();
 				}
 
-				$format = strtolower($columns[$headers[6]]);
-				$dirs = $columns[$headers[7]];
-				if (strpos($columns[$headers[8]], "{{") && strpos($columns[$headers[8]], "}}")){
+				if ($columns[$headers[6]]){
+					$format = strtolower($columns[$headers[6]]);
+				} else {
+					$format = 'dol';
+				}
+
+				if ($columns[$headers[7]]){
+					$dirs = $columns[$headers[7]];
+				} else {
+					$dirs = '';
+				}
+
+				if (strpos($columns[$headers[8]], "{{")!==false && strpos($columns[$headers[8]], "}}")!==false){
 					$rating = 0;
-					if (strpos($columns[$headers[8]], "{{Star1}}")) $rating+=1;
-					if (strpos($columns[$headers[8]], "{{Star2}}")) $rating+=2;
-					if (strpos($columns[$headers[8]], "{{Star3}}")) $rating+=3;
-					if (strpos($columns[$headers[8]], "{{Star4}}")) $rating+=4;
-				} else {
+					if (strpos($columns[$headers[8]], "{{Star1}}")!==false) $rating+=1;
+					if (strpos($columns[$headers[8]], "{{Star2}}")!==false) $rating+=2;
+					if (strpos($columns[$headers[8]], "{{Star3}}")!==false) $rating+=3;
+					if (strpos($columns[$headers[8]], "{{Star4}}")!==false) $rating+=4;
+				} else if ($columns[$headers[8]]){
 					$rating = $columns[$headers[8]];
+				} else {
+					$rating = 0;
 				}
-				$downloads = $columns[$headers[9]];
 
-				$imageSize = $columns[$headers[10]];
-				$zipSize = $columns[$headers[13]];
-				$bootSize = $columns[$headers[14]];
+				if ($columns[$headers[9]]){
+					$downloads = $columns[$headers[9]];
+				} else {
+					$downloads = 0;
+				}
 
-				echo trim(str_replace("\n","",str_replace("]","",str_replace("[","",
-					$name . ' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $format . ' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . ' ' . $dirs)))) . $newline;
-				foreach($headers as $key => $header){
-					if ($key == 6) break;
-					echo trim(str_replace("]","",str_replace("[","",str_replace("\n","",$columns[$header])))) . $newline;
+				if ($columns[$headers[10]]){
+					$imageSize = $columns[$headers[10]];
+				} else {
+					$imageSize = 0;
+				}
+
+				if ($columns[$headers[13]]){
+					$zipSize = $columns[$headers[13]];
+				} else {
+					$zipSize = 0;
+				}
+			
+				if ($columns[$headers[14]]){
+					$bootSize = $columns[$headers[14]];
+				} else {
+					$bootSize = 0;
+				}
+
+				echo trim(str_replace("\n","",str_replace("]","",str_replace("[","",$name . ' ' . $timestamp . ' ' . $imageSize . ' ' . $bootSize . ' ' . $format . ' ' . $zipSize . ' ' . $downloads . ' ' . $rating . ' ' . $controllers . " " . $dirs)))) . $newline;
+				for ($headerkey=0;$headerkey<6;$headerkey++){
+					echo trim(str_replace("]","",str_replace("[","",str_replace("\n","",$columns[$headers[$headerkey]])))) . $newline;
 				}
 			}
 		}
