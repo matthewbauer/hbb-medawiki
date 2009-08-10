@@ -4,7 +4,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['specialpage'][] = array(
 	'name' => 'HBB Repo',
 	'author' => 'Matthew Bauer', 
-	'url' => 'http://www.wiibrew.org/wiki/Homebrew Browser', 
+	'url' => 'http://www.wiibrew.org/wiki/Homebrew\ Browser', 
 	'description' => 'This extension creates the page Special:Repo in the Wiki, which can be used by the Homebrew Browser to load Homebrew Apps.',
 	'version' => 0.01
 );

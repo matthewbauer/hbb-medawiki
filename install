@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MEDIAWIKI=/*/*/mediawiki
-REQUIRE_STRING="require_once(\"\$IP/extensions/hbb-repo/Require.php\");"
+REQUIRE_STRING="require_once(\"\$IP/extensions/hbb-repo/require.php\");"
 
 cp -fru ./source/extensions $MEDIAWIKI
 if ( [ -z $(cat $MEDIAWIKI/LocalSettings.php | grep $REQUIRE_STRING) ] ) then
